@@ -1,0 +1,17 @@
+.NavButton {
+  padding: 10px;
+  --button-justify: flex-start;
+
+  &[data-variant='pressed'] {
+    background-color: var(--color-purple-200);
+    color: var(--color-main);
+    font-weight: 700;
+  }
+
+  &[data-variant='default'] {
+    background: none;
+    color: var(--color-pure-black);
+    font-weight: 400;
+    border: none;
+  }
+}

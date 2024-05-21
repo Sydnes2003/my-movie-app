@@ -1,0 +1,15 @@
+.MoviesPage {
+  display: flex;
+}
+
+.pageContent {
+  height: 100%;
+  min-height: 100vh;
+  flex-grow: 1;
+  padding: 40px 90px;
+}
+
+.pageTitle {
+  font-family: var(--font-family-main);
+  font-size: 32px;
+}
