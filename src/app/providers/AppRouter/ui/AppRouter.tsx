@@ -1,11 +1,11 @@
 import {FC, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {routeConfig as routes} from "shared/config/routeConfig.tsx";
-import {AppLoader} from "shared/ui/AppLoader";
+import {Loader} from "shared/ui/Loader";
 
 const AppRouter: FC = () => {
     return (
-        <Suspense fallback={<AppLoader />}>
+        <Suspense fallback={<Loader size={200} type="dots"/>}>
             <Routes>
                 {Object.values(routes).map((route, index) => (
                     <Route

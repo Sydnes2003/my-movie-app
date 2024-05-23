@@ -1,13 +1,13 @@
 import {FC} from 'react';
 import classes from './RatedPage.module.scss';
-import {Sidebar} from "shared/ui/Sidebar";
-import {AppLoader} from "shared/ui/AppLoader";
+import {Sidebar} from "widgets/Sidebar";
+import {Loader} from "shared/ui/Loader";
 
 const RatedPage: FC = () => {
     return (
         <div className={classes.RatedPage}>
             <Sidebar/>
-            <AppLoader size={200} type="dots"/>
+            <Loader size={200} type="dots"/>
         </div>
     );
 };

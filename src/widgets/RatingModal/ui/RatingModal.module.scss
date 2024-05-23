@@ -1,0 +1,67 @@
+:root {
+  --modal-overlay-background-color: rgba(0, 0, 0, 0.2);
+  --modal-window-width: calc(23.75rem * var(--mantine-scale)); // 380px
+  --modal-header-bottom-border: 1px solid var(--color-grey-200);
+
+}
+
+.modalOverlay {
+  background-color: var(--modal-overlay-background-color);
+}
+
+.modalWindow {
+  width: var(--modal-window-width);
+}
+
+.modalHeader {
+  border-bottom: var(--modal-header-bottom-border);
+}
+
+.modalBody {
+  padding: var(--mantine-spacing-md);
+}
+
+.movieTitle {
+  font-size: 16px;
+  line-height: 22.4px;
+  font-weight: bold;
+}
+
+.stars {
+  max-height: 28px;
+}
+
+.buttonSave {
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-main);
+  color: var(--color-white);
+
+  &:hover {
+    background-color: var(--color-purple-400);
+  }
+
+  &:active {
+    background-color: var(--color-purple-600);
+  }
+}
+
+.buttonRemove {
+  padding: 0;
+  background: none;
+  color: var(--color-main);
+
+  &:hover {
+    background: none;
+    color: var(--color-purple-400);
+  }
+
+  &:active {
+    background: none;
+    color: var(--color-purple-600);
+  }
+}
+
+.modalBody,
+.stars {
+  flex-wrap: nowrap;
+}

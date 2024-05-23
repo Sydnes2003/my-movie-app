@@ -45,7 +45,7 @@ const theme: MantineThemeOverride = createTheme({
     primaryColor: 'violet',
     primaryShade: 5,
     breakpoints: {
-        xxl: '120em',
+        xxl: '120rem',
     },
 });
 
