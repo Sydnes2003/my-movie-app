@@ -1,9 +1,10 @@
 import {createTheme, MantineThemeOverride} from "@mantine/core";
 
 const theme: MantineThemeOverride = createTheme({
+    fontFamily: 'Inter, sans-serif',
     colors: {
         // Grey
-        gray: [
+        grey: [
             '#FFFFFF',
             '#F5F5F6',
             '#EAEBED',
@@ -43,6 +44,9 @@ const theme: MantineThemeOverride = createTheme({
     },
     primaryColor: 'violet',
     primaryShade: 5,
+    breakpoints: {
+        xxl: '120em',
+    },
 });
 
 export default theme;

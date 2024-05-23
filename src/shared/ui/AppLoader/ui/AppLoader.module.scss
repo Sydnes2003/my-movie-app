@@ -1,0 +1,8 @@
+.loaderWrapper {
+    flex-grow: 1;
+}
+
+.loader {
+    //--loader-size: calc(25rem * var(--mantine-scale)); // 400px
+    --loader-color: var(--color-main);
+}

@@ -1,33 +1,47 @@
 :root {
+    // ----- CHECK MANTINE THEME OVERRIDE -----
     // Fonts
-    --font-family-main: 'Inter', sans-serif;
-    --font-family-logo: 'Poppins', sans-serif;
+    --font-family-main: var(--mantine-font-family);
 
     --font-size-main: 16px;
     --font-main: var(--font-size-main) var(--font-family-main);
 
+    // Radius
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+
+    // ----- CHECK MANTINE THEME OVERRIDE -----
     // Colors
     // |-- Grey Scale
-    --color-black: #232134;
-    --color-grey-600: #7B7C88;
-    --color-grey-500: #ACADB9;
-    --color-grey-300: #D5D6DC;
-    --color-grey-200: #EAEBED;
-    --color-grey-100: #F5F5F6;
-    --color-white: #FFFFFF;
+    --color-black: var(--mantine-color-grey-7);
+    --color-grey-600: var(--mantine-color-grey-6);
+    --color-grey-500: var(--mantine-color-grey-5);
+    --color-grey-300: var(--mantine-color-grey-3);
+    --color-grey-200: var(--mantine-color-grey-2);
+    --color-grey-100: var(--mantine-color-grey-1);
+    --color-white: var(--mantine-color-grey-0);
 
     // |-- Purple
-    --color-purple-600: #541F9D;
-    --color-purple-500: #9854F6;
-    --color-purple-400: #BD93F7;
-    --color-purple-300: #D1B4F8;
-    --color-purple-200: #E5D5FA;
-    --color-purple-100: #F2ECFA;
+    --color-purple-600: var(--mantine-color-violet-6);
+    --color-purple-500: var(--mantine-color-violet-5);
+    --color-purple-400: var(--mantine-color-violet-4);
+    --color-purple-300: var(--mantine-color-violet-3);
+    --color-purple-200: var(--mantine-color-violet-2);
+    --color-purple-100: var(--mantine-color-violet-1);
 
     // |-- Yellow
-    --color-yellow: #FAB005;
+    --color-yellow: var(--mantine-color-yellow-0);
 
     // |-- etc...
     --color-main: var(--color-purple-500);
     --color-pure-black: #000000;
+
+    //
+
+    // Custom variables
+    --custom-label-input-gap: 8px;
+    --custom-pill-height: var(--pill-height-sm);
+    --custom-pg-gap: 0;
+    --custom-pill-separator: ", \00a0";
 }

@@ -1,3 +1,67 @@
-.CustomSelect {
+.pillRoot {
+  // size prop overrides the pill height,
+  // no matter how much I tried not to use !important
+  --pill-height: var(--custom-pill-height) !important;
+  --pill-fz: var(--mantine-font-size-sm);
+  background: none;
+  padding: 0;
+}
 
+.pillGroup {
+  // size prop overrides the gap size,
+  // no matter how much I tried not to use !important
+  --pg-gap: var(--custom-pg-gap) !important;
+}
+
+.withSeparator::after {
+  content: var(--custom-pill-separator);
+}
+
+.inputLabel {
+  font-weight: bold;
+  margin-bottom: var(--custom-label-input-gap);
+}
+
+.inputWrapper {
+  --input-placeholder-color: var(--color-grey-500);
+  --input-bd: var(--color-grey-300);
+  --input-bg: var(--color-white);
+  --input-bd-focus: var(--color-main);
+}
+
+.inputInput {
+  display: flex;
+  border-radius: var(--border-radius-md);
+  --input-fz: var(--mantine-font-size-sm);
+  --input-line-height: var(--mantine-line-height-sm);
+}
+
+.comboboxDropdown {
+  border-radius: var(--border-radius-md);
+  border: none;
+}
+
+.comboboxOption {
+  line-height: var(--mantine-line-height-sm);
+  border-radius: var(--border-radius-md);
+}
+
+.comboboxOption[data-combobox-active] {
+  background-color: var(--color-main);
+  color: var(--color-white);
+}
+
+.comboboxOption:hover {
+  background-color: var(--color-purple-100);
+  color: var(--color-pure-black);
+}
+
+.noTopRadius {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.noBottomRadius {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }

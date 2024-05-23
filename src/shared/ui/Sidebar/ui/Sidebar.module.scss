@@ -1,7 +1,48 @@
+:root {
+  --sidebar-primary-color: var(--color-main);
+  --sidebar-secondary-color: var(--color-purple-100);
+  --sidebar-padding: calc(1.5rem * var(--mantine-scale)); // 24px
+  --sidebar-width: 280px;
+
+  --navLink-padding: calc(0.625rem * var(--mantine-scale)); // 10px
+  --navLink-font-size: calc(1rem * var(--mantine-scale)); // 16px
+  --navLink-line-height: calc(1.4rem * var(--mantine-scale)); // 22.4px
+
+  --navLink-active-background-color: var(--color-purple-200);
+  --navLink-active-font-weight: bold;
+}
+
 .sidebar {
-  width: 280px;
   min-height: 100vh;
-  height: 100%;
-  padding: 24px;
-  background-color: var(--color-purple-100);
+  width: var(--sidebar-width);
+  padding: var(--sidebar-padding);
+  background-color: var(--sidebar-secondary-color);
+}
+
+.navLinkLabel {
+  font-size: var(--navLink-font-size);
+  line-height: var(--navLink-line-height);
+}
+
+.navLink {
+  padding: var(--navLink-padding);
+  border-radius: var(--border-radius-md);
+}
+
+.navLink:hover {
+  background-color: var(--sidebar-secondary-color);
+  color: var(--sidebar-primary-color);
+  outline: 1px solid var(--sidebar-primary-color);
+}
+
+.navLink:where([data-active], [aria-current='page']) {
+  background-color: var(--navLink-active-background-color);
+  color: var(--sidebar-primary-color);
+  font-weight: var(--navLink-active-font-weight);
+}
+
+.navLink:where([data-active], [aria-current='page']):hover {
+  background-color: var(--sidebar-primary-color);
+  color: var(--sidebar-secondary-color);
+  outline-color: var(--sidebar-primary-color);
 }

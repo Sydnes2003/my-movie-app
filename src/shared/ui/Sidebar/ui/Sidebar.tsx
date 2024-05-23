@@ -1,34 +1,33 @@
 import {FC} from 'react';
-import {useMantineTheme, Stack} from "@mantine/core";
+import {Stack, NavLink, StackProps} from "@mantine/core";
 import {Logo} from "shared/ui/Logo";
 import classes from './Sidebar.module.scss';
-import {NavButton} from "shared/ui/NavButton";
+import {NavLink as ReactRouterNavLink} from "react-router-dom";
+import {routePath} from "shared/config/routeConfig.tsx";
 
-const Sidebar: FC = () => {
-    const theme = useMantineTheme();
-    const mainColor = theme.colors[theme.primaryColor][theme.primaryShade as number];
-    // todo: Implement button state with 'location'
-
+const Sidebar: FC<StackProps> = (props) => {
     return (
-        <Stack className={classes.sidebar} gap='80px'>
-            <Logo fill={mainColor}/>
-            <Stack className={classes.buttons}>
-                <NavButton
-                    className={classes.navButton}
-                    variant='pressed'
-                    size="md"
-                    radius="md"
-                >
-                    Movies
-                </NavButton>
-                <NavButton
-                    className={classes.navButton}
-                    variant='default'
-                    size="md"
-                    radius="md"
-                >
-                    Rated movies
-                </NavButton>
+        <Stack classNames={{root: classes.sidebar}} gap={80} {...props}>
+            <Logo />
+            <Stack>
+                <NavLink
+                    classNames={{
+                        root: classes.navLink,
+                        label: classes.navLinkLabel,
+                    }}
+                    component={ReactRouterNavLink}
+                    label='Movies'
+                    to={routePath.movies}
+                />
+                <NavLink
+                    classNames={{
+                        root: classes.navLink,
+                        label: classes.navLinkLabel,
+                    }}
+                    component={ReactRouterNavLink}
+                    label='Rated movies'
+                    to={routePath.rated}
+                />
             </Stack>
         </Stack>
     );
