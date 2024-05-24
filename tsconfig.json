@@ -20,10 +20,10 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
+    "no-unused-variable": [true, {"ignore-pattern": "^_"}],
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

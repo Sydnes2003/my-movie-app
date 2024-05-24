@@ -2,6 +2,7 @@ import {FC} from 'react';
 import classes from './ComboSingleSelect.module.scss';
 import {Combobox, ComboboxProps, Group, Input, Pill, PillsInput, ScrollArea, useCombobox} from "@mantine/core";
 import {SvgChevron} from "shared/ui/SvgChevron";
+import {SvgArrows} from "shared/ui/SvgArrows";
 
 type Value = string;
 
@@ -11,6 +12,7 @@ interface ComboSingleSelectProps<T> extends ComboboxProps {
     value: T;
     valueSetter: (selected: T) => void;
     options: Array<T>;
+    rightSection?: 'chevron' | 'arrows';
 }
 
 const ComboSingleSelect: FC<ComboSingleSelectProps<Value>> = (
@@ -20,6 +22,7 @@ const ComboSingleSelect: FC<ComboSingleSelectProps<Value>> = (
         value,
         valueSetter,
         options,
+        rightSection = 'chevron',
     },
 ) => {
     const combobox = useCombobox({
@@ -55,12 +58,20 @@ const ComboSingleSelect: FC<ComboSingleSelectProps<Value>> = (
     ));
 
     const inputRightSection = (
-        <SvgChevron
-            fill={combobox.dropdownOpened ? [] : ['grey', 5]}
-            variant={combobox.dropdownOpened ? 'up' : 'down'}
-            size="22"
-            thickness="1"
-        />
+        rightSection === 'chevron'
+            ? (
+                <SvgChevron
+                    fill={combobox.dropdownOpened ? [] : ['grey', 5]}
+                    variant={combobox.dropdownOpened ? 'up' : 'down'}
+                    size="22"
+                    thickness="1"
+                />
+            ) : (
+                <SvgArrows
+                    fill={combobox.dropdownOpened ? [] : ['grey', 5]}
+                    thickness="1"
+                />
+            )
     );
 
     const inputContents = (

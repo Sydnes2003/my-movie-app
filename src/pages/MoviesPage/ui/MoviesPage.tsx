@@ -1,78 +1,83 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import classes from './MoviesPage.module.scss';
 import {Box, Group, SimpleGrid, Stack, Title} from "@mantine/core";
 import {MovieCard} from "entities/MovieCard";
 import {useDisclosure} from "@mantine/hooks";
 import {RatingModal} from "widgets/RatingModal";
 import {SvgClose} from "shared/ui/SvgClose";
-import {Filter, Movie} from "shared/types/types.ts";
+import {FETCHING_LANGUAGE, Filter, Genre, SortTitle, Year} from "shared/types/types.ts";
 import {MovieFilter} from "widgets/MovieFilter";
-
-/* MOCK DATA */ /* MOCK DATA */ /* MOCK DATA */ /* MOCK DATA */
-const genres = [
-    'Drama',
-    'Comedy',
-    'Animation',
-    'Thriller',
-    'Fantasy',
-];
-const years = [
-    '1980',
-    '1981',
-    '1982',
-    '1983',
-    '1984',
-    '1985',
-    '1986',
-    '1987',
-    '1988',
-    '1989',
-    '1990',
-];
-// const sort = [
-//     'Most Popular',
-//     'Least Popular',
-//     'Most Rated',
-//     'Least Rated',
-//     'Most Voted',
-//     'Least Voted',
-// ];
-const exampleMovie: Movie = {
-    id: 228228,
-    poster: 'src/shared/assets/images/example-image.png',
-    title: 'The Green Mile',
-    year: 1999,
-    rating: {
-        avg: 9.3,
-        count: 2900000,
-    },
-    genres: [
-        'Drama',
-        'Crime',
-        'Fantasy',
-        'Thriller',
-    ],
-};
-/* MOCK DATA */ /* MOCK DATA */ /* MOCK DATA */ /* MOCK DATA */
+import {MovieSort} from "widgets/MovieSort";
+import {useMovies} from "shared/lib/hooks/useMovies/useMovie.ts";
+import {useFetching} from "shared/lib/hooks/useFetching/useFetching.ts";
+import MoviesService from "shared/api/MoviesService.ts";
 
 const MoviesPage: FC = () => {
+    /* MOCK DATA */ /* MOCK DATA */ /* MOCK DATA */ /* MOCK DATA */
+    const EXAMPLE_MOVIE = {
+        id: 228228,
+        poster: 'src/shared/assets/images/example-image.png',
+        title: 'The Green Mile',
+        year: 1999,
+        rating: {
+            avg: 9.3,
+            count: 2900000,
+        },
+        genres: [
+            'Drama',
+            'Crime',
+            'Fantasy',
+            'Thriller',
+        ],
+    };
+    /* MOCK DATA */ /* MOCK DATA */ /* MOCK DATA */ /* MOCK DATA */
+    // MODAL
     const [isModalOpened, {open: openModal, close: closeModal}] = useDisclosure(false);
-    const [filter, setFilter] = useState<Filter>({
+
+    // GENRES
+    const [genres, setGenres] = useState<Genre[]>([]);
+    const [fetchGenres, areGenresLoading, errorOnFetchingGenres] = useFetching(async () => {
+        const response = await MoviesService.getGenres({language: FETCHING_LANGUAGE});
+        setGenres(response.data.genres);
+    });
+    useEffect(() => {
+        (fetchGenres as () => Promise<void>)();
+    }, []);
+
+    // YEARS
+    const [years, setYears] = useState<Year[]>([]);
+
+    // MOVIES todo: Change Movie to Movies, CHECK GENRES TYPE, CHECK YEAR TYPE, CHECK RATING TYPE
+    const {movie, setMovie, handleRatingSubmit} = useMovies(
+        {
+            initialState: EXAMPLE_MOVIE,
+            onRatingSubmit: closeModal,
+        },
+    );
+
+    // PAGINATION
+
+
+
+    const EMPTY_FILTER: Filter = {
         genres: [],
         year: '',
         rating: {
-            from: 0,
-            to: 10,
+            from: '',
+            to: '',
         },
-    });
+    };
+    const [filter, setFilter] = useState<Filter>(EMPTY_FILTER);
+    const [sort, setSort] = useState<SortTitle>('Most Popular');
 
-    // todo: Move 'gap' to CSS
+
     return (
         <Box className={classes.MoviesPage}>
             <RatingModal
-                movie={exampleMovie}
-                opened={isModalOpened}
+                movie={movie}
+                onRatingSubmit={handleRatingSubmit}
                 onClose={closeModal}
+                opened={isModalOpened}
                 title="Your rating"
                 closeButtonProps={{icon: <SvgClose fill={['grey', 5]}/>}}
                 centered
@@ -84,36 +89,45 @@ const MoviesPage: FC = () => {
                     <MovieFilter
                         filter={filter}
                         setFilter={setFilter}
-                        options={{genres: genres, years: years}}
+                        options={{
+                            genres: genres.map((genre) => genre.name),
+                            years: years.map((year) => year.toString()),
+                        }}
+                        emptyFilter={EMPTY_FILTER}
+                        gap="16px"
+                        grow
+                        preventGrowOverflow={true}
                     />
-                    {/* todo: "Ratings" filter */}
-                    {/* todo: "Reset filters" button */}
-                    <Group> {/* Сортировка */}
-
-                    </Group>
+                    <MovieSort
+                        sort={sort}
+                        setSort={setSort}
+                        gap="16px"
+                        grow
+                        preventGrowOverflow={true}
+                    />
                     <SimpleGrid
                         cols={{lg: 1, xl: 2, xxl: 3, rem150: 4, rem180: 5, rem210: 6, rem240: 7}}
                     >
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
-                        <MovieCard movie={exampleMovie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
+                        <MovieCard movie={movie} openRatingModal={openModal}/>
                     </SimpleGrid>
                     <Group> {/* Пагинация */}
 

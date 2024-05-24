@@ -1,23 +1,39 @@
-import {FC, useEffect} from 'react';
-import {Group} from "@mantine/core";
-import ComboSingleSelect from "../../../shared/ui/ComboSingleSelect/ui/ComboSingleSelect.tsx";
+import {FC} from 'react';
+import {Button, Group, GroupProps} from "@mantine/core";
 import {Filter, FilterOptions, FilterSetter} from "shared/types/types.ts";
 import {ComboMultiSelect} from "shared/ui/ComboMultiSelect";
+import {ComboRangeSelect} from "shared/ui/ComboRangeSelect";
+import {ComboSingleSelect} from "shared/ui/ComboSingleSelect";
+import classes from "./MovieFilter.module.scss";
 
-interface MovieFilterProps {
+interface MovieFilterProps extends GroupProps {
     filter: Filter,
     setFilter: FilterSetter,
     options: FilterOptions,
+    emptyFilter: Filter,
 }
 
-const MovieFilter: FC<MovieFilterProps> = ({filter, setFilter, options}) => {
-    useEffect(() => {
-        console.log(filter.year);
-        console.log(filter.genres);
-    }, [filter.year, filter.genres]);
+const RATING_RANGE_OPTIONS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
+const MovieFilter: FC<MovieFilterProps> = (
+    {
+        filter,
+        setFilter,
+        options,
+        emptyFilter,
+        ...props
+    },
+) => {
+    const isFilterEmpty = (
+        (filter.genres.length === 0 ||
+            (filter.genres.length === 1 && filter.genres[0] === '')) &&
+        filter.year === emptyFilter.year &&
+        filter.rating.from === emptyFilter.rating.from &&
+        filter.rating.to === emptyFilter.rating.to
+    );
 
     return (
-        <Group gap="16px" grow preventGrowOverflow={true}>
+        <Group {...props}>
             <ComboMultiSelect
                 label="Genres"
                 placeholder="Select genre"
@@ -32,10 +48,28 @@ const MovieFilter: FC<MovieFilterProps> = ({filter, setFilter, options}) => {
                 valueSetter={(selected) => setFilter({...filter, year: selected})}
                 options={options.years}
             />
-            <div>
-                {/* todo: "Ratings" filter */}
-            </div>
-            {/* todo: "Reset filters" button */}
+            <ComboRangeSelect
+                labels={{from: "Ratings", to: ""}}
+                placeholders={{from: "From", to: "To"}}
+                values={{from: filter.rating.from, to: filter.rating.to}}
+                valueSetters={{
+                    from: (selected) => setFilter({...filter, rating: {...filter.rating, from: selected}}),
+                    to: (selected) => setFilter({...filter, rating: {...filter.rating, to: selected}}),
+                }}
+                options={{from: RATING_RANGE_OPTIONS, to: RATING_RANGE_OPTIONS}}
+                groupProps={{
+                    align: 'flex-end',
+                    grow: true,
+                }}
+                rightSection="arrows"
+            />
+            <Button
+                classNames={{root: classes.resetButton}}
+                onClick={() => setFilter(emptyFilter)}
+                disabled={isFilterEmpty}
+            >
+                Reset filters
+            </Button>
         </Group>
     );
 };

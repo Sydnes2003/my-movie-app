@@ -1,137 +1,51 @@
-import {FC, useState} from 'react';
-import classes from './ComboRangeSelect.module.scss';
-import {Combobox, ComboboxProps, Group, Input, Pill, PillsInput, ScrollArea, useCombobox} from "@mantine/core";
-import {SvgChevron} from "shared/ui/SvgChevron";
+import {FC} from 'react';
+import {ComboboxProps, Group, GroupProps} from "@mantine/core";
+import {ComboSingleSelect} from "shared/ui/ComboSingleSelect";
 
-type DataItem = string;
+type Item = string;
+type Values<Item> = {
+    from: Item,
+    to: Item,
+};
+type Key = keyof Values<Item>;
 
 interface ComboRangeSelectProps extends ComboboxProps {
-    label?: string;
-    placeholder?: string;
-    onChange?: () => void;
-    data: Array<DataItem>;
+    labels?: Values<Item>;
+    placeholders?: Values<Item>;
+    values: Values<Item>;
+    valueSetters: Values<(selected: Item) => void>;
+    options: Values<Item[]>;
+    groupProps?: {
+        align?: GroupProps["align"];
+        grow?: GroupProps["grow"];
+    };
+    rightSection?: 'chevron' | 'arrows';
 }
-
-const emptyValue = '';
 
 const ComboRangeSelect: FC<ComboRangeSelectProps> = (
     {
-        label = '',
-        placeholder = '',
-        onChange = () => {},
-        data,
+        labels= {from: '', to: ''},
+        placeholders= {from: '', to: ''},
+        values,
+        valueSetters,
+        options,
+        groupProps = {},
+        rightSection = 'chevron',
     },
 ) => {
-    const [value, setValue] = (
-        useState<DataItem>(emptyValue)
-    );
-
-    const combobox = useCombobox({
-        onDropdownClose: () => combobox.resetSelectedOption(),
-        onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
-    });
-
-    const handleValueSelect = (selected: DataItem) => {
-        setValue((current) => current === selected ? emptyValue : selected);
-    };
-    const handleValueRemove = () => {
-        setValue(emptyValue);
-    };
-
-    const contents = (
-        value
-            ? <Pill classNames={{root: classes.pillRoot, label: classes.pillLabel}}>
-                {value}
-            </Pill>
-            : value
-    );
-
-    const options = data.map((item) => (
-        <Combobox.Option
-            value={item}
-            key={item}
-            active={value === item}
-        >
-            <Group gap="sm">
-                {item}
-            </Group>
-        </Combobox.Option>
-    ));
-
-    const inputRightSection = (
-        <SvgChevron
-            fill={combobox.dropdownOpened ? [] : ['grey', 5]}
-            variant={combobox.dropdownOpened ? 'up' : 'down'}
-            size="22"
-            thickness="1"
-        />
-    );
-
-    const inputContents = (
-        contents
-            ? contents
-            : <Input.Placeholder>
-                {placeholder}
-            </Input.Placeholder>
-    );
-
     return (
-        <Combobox
-            store={combobox}
-            classNames={{
-                dropdown: classes.comboboxDropdown,
-                option: classes.comboboxOption,
-            }}
-            onOptionSubmit={handleValueSelect}
-            withinPortal={false}
-        >
-            <Combobox.DropdownTarget>
-                <PillsInput
-                    classNames={{
-                        label: classes.inputLabel,
-                        wrapper: classes.inputWrapper,
-                        input: classes.inputInput,
-                    }}
-                    size="md"
-                    label={label}
-                    pointer
-                    onClick={() => combobox.toggleDropdown()}
-                    rightSection={inputRightSection}
-                >
-                    <Pill.Group classNames={{group: classes.pillGroup}}>
-                        {inputContents}
-
-                        <Combobox.EventsTarget>
-                            <PillsInput.Field
-                                type="hidden"
-                                onBlur={() => combobox.closeDropdown()}
-                                onKeyDown={(event) => {
-                                    if (event.key === 'Backspace') {
-                                        event.preventDefault();
-                                        handleValueRemove();
-                                    }
-                                }}
-                                onChange={onChange}
-                            />
-                        </Combobox.EventsTarget>
-                    </Pill.Group>
-                </PillsInput>
-            </Combobox.DropdownTarget>
-
-            <Combobox.Dropdown>
-                <Combobox.Options>
-                    <ScrollArea.Autosize
-                        classNames={{
-                            thumb: classes.dropdownScrollThumb,
-                        }}
-                        type="hover"
-                        mah={200}
-                    >
-                        {options}
-                    </ScrollArea.Autosize>
-                </Combobox.Options>
-            </Combobox.Dropdown>
-        </Combobox>
+        <Group gap={8} {...groupProps}>
+            {(Object.keys(values) as Key[]).map((key) =>
+                <ComboSingleSelect
+                    label={labels[key]}
+                    placeholder={placeholders[key]}
+                    value={values[key]}
+                    valueSetter={valueSetters[key]}
+                    options={options[key]}
+                    rightSection={rightSection}
+                />,
+            )}
+        </Group>
     );
 };
 

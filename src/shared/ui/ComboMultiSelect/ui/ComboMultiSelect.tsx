@@ -4,6 +4,7 @@ import {Combobox, Group, Pill, PillsInput, Input, ScrollArea, useCombobox, Combo
 import {SvgChevron} from "shared/ui/SvgChevron";
 import {radiusMerger} from "shared/lib/helpers/radiusMerger/radiusMerger.ts";
 import {isLastElement} from "shared/lib/helpers/isLastElement/isLastElement.ts";
+import {SvgArrows} from "shared/ui/SvgArrows";
 
 type ValueItem = string;
 type Value = Array<ValueItem>;
@@ -14,6 +15,7 @@ interface ComboMultiSelectProps<T> extends ComboboxProps {
     value: T;
     valueSetter: (selected: T) => void;
     options: T;
+    rightSection?: 'chevron' | 'arrows';
 }
 
 const ComboMultiSelect: FC<ComboMultiSelectProps<Value>> = (
@@ -23,6 +25,7 @@ const ComboMultiSelect: FC<ComboMultiSelectProps<Value>> = (
         value,
         valueSetter,
         options,
+        rightSection = 'chevron',
     },
 ) => {
     const combobox = useCombobox({
@@ -83,13 +86,22 @@ const ComboMultiSelect: FC<ComboMultiSelectProps<Value>> = (
     ));
 
     const inputRightSection = (
-        <SvgChevron
-            fill={combobox.dropdownOpened ? [] : ['grey', 5]}
-            variant={combobox.dropdownOpened ? 'up' : 'down'}
-            size="22"
-            thickness="1"
-        />
+        rightSection === 'chevron'
+            ? (
+                <SvgChevron
+                    fill={combobox.dropdownOpened ? [] : ['grey', 5]}
+                    variant={combobox.dropdownOpened ? 'up' : 'down'}
+                    size="22"
+                    thickness="1"
+                />
+            ) : (
+                <SvgArrows
+                    fill={combobox.dropdownOpened ? [] : ['grey', 5]}
+                    thickness="1"
+                />
+            )
     );
+
     const inputContents = (
         contentComponents.length > 0
             ? contentComponents

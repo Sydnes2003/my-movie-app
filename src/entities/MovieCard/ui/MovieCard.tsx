@@ -1,9 +1,9 @@
-import {FC, useState} from 'react';
+import {FC} from 'react';
 import {Group, Image, Stack, Title, Text} from "@mantine/core";
 import classes from "./MovieCard.module.scss";
 import {SvgStar} from "shared/ui/SvgStar";
 import {numFormatter} from "shared/lib/helpers/numFormatter/numFormatter.ts";
-import {Movie, Rating} from "shared/types/types.ts";
+import {Movie} from "shared/types/types.ts";
 
 /* MOCK DATA */ /* MOCK DATA */ /* MOCK DATA */ /* MOCK DATA */
 const FALLBACK_IMAGE = 'src/shared/assets/images/fallback-image.png';
@@ -20,12 +20,10 @@ const MovieCard: FC<MovieCardProps> = (
         movie,
     },
 ) => {
+    const GENRES_LIMIT = 3;
+    const rating = movie.userRating;
 
     // todo: Implement localStorage memory of this state, event handler
-    const [rating, setRating] = useState<Rating>(1);
-    console.log(setRating);
-
-    const GENRES_LIMIT = 3;
 
     return (
         <Group classNames={{root: classes.movieCard}} gap={8}>
@@ -36,14 +34,16 @@ const MovieCard: FC<MovieCardProps> = (
                     src={movie.poster}
                     fallbackSrc={FALLBACK_IMAGE}
                     data-clickable
-                    onClick={() => {}}
+                    onClick={() => {
+                    }}
                 />
                 <Stack classNames={{root: classes.movieDetails}}>
                     <Stack gap={8}>
                         <Title
                             classNames={{root: classes.movieTitle}}
                             data-clickable
-                            onClick={() => {}}
+                            onClick={() => {
+                            }}
                         > {movie.title} </Title>
                         <Text classNames={{root: classes.movieYear}}> {movie.year} </Text>
                         <Group classNames={{root: classes.ratingWrapper}} gap={8}>
@@ -70,7 +70,7 @@ const MovieCard: FC<MovieCardProps> = (
                 onClick={openRatingModal}
             >
                 <SvgStar fill={rating ? [] : ['grey', 3]}/>
-                { rating
+                {rating
                     ? <Text classNames={{root: classes.ratingUserLabel}}> {rating} </Text>
                     : <></>
                 }

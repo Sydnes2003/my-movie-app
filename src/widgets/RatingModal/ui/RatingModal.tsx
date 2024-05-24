@@ -1,17 +1,34 @@
 import {FC, useState} from 'react';
 import classes from './RatingModal.module.scss';
-import {Button, Group, Modal, ModalProps, Rating, Stack, Title} from "@mantine/core";
-import {Movie, POSSIBLE_USER_RATINGS} from "shared/types/types.ts";
+import {Button, Group, Modal, ModalProps, Rating as MantineRating, Stack, Title} from "@mantine/core";
+import {Movie, POSSIBLE_USER_RATINGS, Rating} from "shared/types/types.ts";
 import {SvgStar} from "shared/ui/SvgStar";
 
 interface RatingModalProps extends ModalProps {
     movie: Movie,
+    onRatingSubmit: (movie: Movie, chosen: number) => void,
 }
 
-const RatingModal: FC<RatingModalProps> = ({movie, ...restProps}) => {
-    const [rating, setRating] = useState(
+const RatingModal: FC<RatingModalProps> = (
+    {
+        movie,
+        onRatingSubmit,
+        ...restProps
+    },
+) => {
+    const [chosenRating, setChosenRating] = useState<Rating>(
         movie.userRating ? movie.userRating : 0,
     );
+
+    const handleChange = (selected: number) => {
+        setChosenRating(selected as Rating);
+    };
+    const handleRemove = () => {
+        setChosenRating(0);
+    };
+    const handleSubmit = () => {
+        onRatingSubmit(movie as Movie, chosenRating);
+    };
 
     return (
         <Modal
@@ -25,24 +42,24 @@ const RatingModal: FC<RatingModalProps> = ({movie, ...restProps}) => {
         >
             <Stack gap={16}>
                 <Title classNames={{root: classes.movieTitle}}> {movie.title} </Title>
-                <Rating
+                <MantineRating
                     classNames={{root: classes.stars}}
-                    count={POSSIBLE_USER_RATINGS.length}
-                    value={rating}
-                    onChange={setRating}
+                    count={POSSIBLE_USER_RATINGS.length - 1}
+                    value={chosenRating}
+                    onChange={handleChange}
                     emptySymbol={<SvgStar fill={['grey', 3]}/>}
                     fullSymbol={<SvgStar fill={['yellow', 0]}/>}
                 />
                 <Group gap={16}>
                     <Button
                         classNames={{root: classes.buttonSave}}
-                        onClick={() => {}}
+                        onClick={handleSubmit}
                     >
                         Save
                     </Button>
                     <Button
                         classNames={{root: classes.buttonRemove}}
-                        onClick={() => setRating(0)}
+                        onClick={handleRemove}
                     >
                         Remove rating
                     </Button>
