@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {SvgComponentProps} from "shared/types/ui.ts";
-import {useColor} from "shared/lib/hooks/useColor/useColor.tsx";
+import {useColor} from "shared/lib/hooks/useColor/useColor.ts";
 
 interface SvgCloseProps extends SvgComponentProps {
 

@@ -41,6 +41,10 @@
   border: none;
 }
 
+.dropdownScrollThumb {
+  max-width: 4px;
+}
+
 .comboboxOption {
   line-height: var(--mantine-line-height-sm);
   border-radius: var(--border-radius-md);

@@ -1,62 +1,59 @@
 import {FC, useState} from 'react';
-import classes from './ComboSelect.module.scss';
-import {Combobox, Group, Pill, PillsInput, Input, useCombobox, ComboboxProps} from "@mantine/core";
+import classes from './ComboRangeSelect.module.scss';
+import {Combobox, ComboboxProps, Group, Input, Pill, PillsInput, ScrollArea, useCombobox} from "@mantine/core";
 import {SvgChevron} from "shared/ui/SvgChevron";
-import {radiusMerger} from "shared/lib/helpers/radiusMerger/radiusMerger.ts";
-import {isLastElement} from "shared/lib/helpers/isLastElement/isLastElement.ts";
 
-interface ComboSelectProps extends ComboboxProps {
+type DataItem = string;
+
+interface ComboRangeSelectProps extends ComboboxProps {
     label?: string;
     placeholder?: string;
-    data: string[];
+    onChange?: () => void;
+    data: Array<DataItem>;
 }
 
-const ComboSelect: FC<ComboSelectProps> = ({label= 'PLACEHOLDER', placeholder= 'PLACEHOLDER', data}) => {
-    const [value, setValue] = useState<string[]>([]);
+const emptyValue = '';
+
+const ComboRangeSelect: FC<ComboRangeSelectProps> = (
+    {
+        label = '',
+        placeholder = '',
+        onChange = () => {},
+        data,
+    },
+) => {
+    const [value, setValue] = (
+        useState<DataItem>(emptyValue)
+    );
 
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
         onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
     });
 
-    const handleValueSelect = (val: string) => {
-        setValue((current) =>
-            current.includes(val) ? current.filter((v) => v !== val) : [...current, val],
-        );
+    const handleValueSelect = (selected: DataItem) => {
+        setValue((current) => current === selected ? emptyValue : selected);
     };
-    const handleValueRemove = (val: string) => {
-        setValue((current) => current.filter((v) => v !== val));
+    const handleValueRemove = () => {
+        setValue(emptyValue);
     };
 
-    const values = value.map((item) => (
-        <Pill
-            classNames={{
-                root: classes.pillRoot,
-                label: (
-                    isLastElement({item: item, array: value}) ? classes.pillLabel : [classes.pillLabel, classes.withSeparator].join(' ')
-                ),
-            }}
-            key={item}
-        >
-            {item}
-        </Pill>
-    ));
+    const contents = (
+        value
+            ? <Pill classNames={{root: classes.pillRoot, label: classes.pillLabel}}>
+                {value}
+            </Pill>
+            : value
+    );
+
     const options = data.map((item) => (
         <Combobox.Option
-            className={radiusMerger({
-                item: item,
-                array: value,
-                classes: [
-                    classes.noTopRadius,
-                    classes.noBottomRadius,
-                ],
-            })}
             value={item}
             key={item}
-            active={value.includes(item)}
+            active={value === item}
         >
             <Group gap="sm">
-                <span>{item}</span>
+                {item}
             </Group>
         </Combobox.Option>
     ));
@@ -65,11 +62,18 @@ const ComboSelect: FC<ComboSelectProps> = ({label= 'PLACEHOLDER', placeholder= '
         <SvgChevron
             fill={combobox.dropdownOpened ? [] : ['grey', 5]}
             variant={combobox.dropdownOpened ? 'up' : 'down'}
-            size='22'
-            thickness='1'
+            size="22"
+            thickness="1"
         />
     );
-    const inputContents = values.length > 0 ? ( values ) : ( <Input.Placeholder>{placeholder}</Input.Placeholder> );
+
+    const inputContents = (
+        contents
+            ? contents
+            : <Input.Placeholder>
+                {placeholder}
+            </Input.Placeholder>
+    );
 
     return (
         <Combobox
@@ -94,7 +98,7 @@ const ComboSelect: FC<ComboSelectProps> = ({label= 'PLACEHOLDER', placeholder= '
                     onClick={() => combobox.toggleDropdown()}
                     rightSection={inputRightSection}
                 >
-                    <Pill.Group classNames={{ group: classes.pillGroup }}>
+                    <Pill.Group classNames={{group: classes.pillGroup}}>
                         {inputContents}
 
                         <Combobox.EventsTarget>
@@ -104,9 +108,10 @@ const ComboSelect: FC<ComboSelectProps> = ({label= 'PLACEHOLDER', placeholder= '
                                 onKeyDown={(event) => {
                                     if (event.key === 'Backspace') {
                                         event.preventDefault();
-                                        handleValueRemove(value[value.length - 1]);
+                                        handleValueRemove();
                                     }
                                 }}
+                                onChange={onChange}
                             />
                         </Combobox.EventsTarget>
                     </Pill.Group>
@@ -114,10 +119,20 @@ const ComboSelect: FC<ComboSelectProps> = ({label= 'PLACEHOLDER', placeholder= '
             </Combobox.DropdownTarget>
 
             <Combobox.Dropdown>
-                <Combobox.Options>{options}</Combobox.Options>
+                <Combobox.Options>
+                    <ScrollArea.Autosize
+                        classNames={{
+                            thumb: classes.dropdownScrollThumb,
+                        }}
+                        type="hover"
+                        mah={200}
+                    >
+                        {options}
+                    </ScrollArea.Autosize>
+                </Combobox.Options>
             </Combobox.Dropdown>
         </Combobox>
     );
 };
 
-export default ComboSelect;
+export default ComboRangeSelect;

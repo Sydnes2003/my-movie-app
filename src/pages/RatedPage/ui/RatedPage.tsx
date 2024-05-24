@@ -1,14 +1,12 @@
 import {FC} from 'react';
 import classes from './RatedPage.module.scss';
-import {Sidebar} from "widgets/Sidebar";
-import {Loader} from "shared/ui/Loader";
+import {Box} from "@mantine/core";
 
 const RatedPage: FC = () => {
     return (
-        <div className={classes.RatedPage}>
-            <Sidebar/>
-            <Loader size={200} type="dots"/>
-        </div>
+        <Box className={classes.RatedPage}>
+            RATED PAGE
+        </Box>
     );
 };
 

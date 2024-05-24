@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useColor} from "shared/lib/hooks/useColor/useColor.tsx";
+import {useColor} from "shared/lib/hooks/useColor/useColor.ts";
 import {SvgComponentProps} from "shared/types/ui.ts";
 
 interface SvgLogoProps extends SvgComponentProps {
@@ -9,12 +9,22 @@ interface SvgLogoProps extends SvgComponentProps {
 const SvgLogo: FC<SvgLogoProps> = (
     {
         fill = [],
+        onClick = () => {},
+        pointer = false,
     },
 ) => {
     const color = useColor(fill);
 
     return (
-        <svg width="179" height="36" viewBox="0 0 179 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width="179"
+            height="36"
+            onClick={onClick}
+            style={{ cursor: pointer ? 'pointer' : 'default' }}
+            viewBox="0 0 179 36"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 fillRule="evenodd"
                 clipRule="evenodd"

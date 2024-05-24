@@ -2,14 +2,19 @@ import {FC} from 'react';
 import {Stack, NavLink, StackProps} from "@mantine/core";
 import {SvgLogo} from "shared/ui/SvgLogo";
 import classes from './Sidebar.module.scss';
-import {NavLink as ReactRouterNavLink} from "react-router-dom";
+import {NavLink as ReactRouterNavLink, useNavigate} from "react-router-dom";
 import {routePath} from "shared/config/routeConfig.tsx";
 
 const Sidebar: FC<StackProps> = (props) => {
+    const navigate = useNavigate();
+
     return (
         // todo: Deal with active links when navigated to movie page
         <Stack classNames={{root: classes.sidebar}} gap={80} {...props}>
-            <SvgLogo />
+            <SvgLogo
+                onClick={() => navigate(routePath.movies)}
+                pointer
+            />
             <Stack>
                 <NavLink
                     classNames={{

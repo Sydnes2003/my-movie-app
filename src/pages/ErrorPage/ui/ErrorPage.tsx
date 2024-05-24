@@ -1,11 +1,12 @@
 import {FC} from 'react';
 import classes from './ErrorPage.module.scss';
+import {Box} from "@mantine/core";
 
 const ErrorPage: FC = () => {
     return (
-        <div className={classes.ErrorPage}>
+        <Box className={classes.ErrorPage}>
             ErrorPage
-        </div>
+        </Box>
     );
 };
 

@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import classes from './RatingModal.module.scss';
 import {Button, Group, Modal, ModalProps, Rating, Stack, Title} from "@mantine/core";
-import {Movie, POSSIBLE_RATINGS} from "shared/types/types.ts";
+import {Movie, POSSIBLE_USER_RATINGS} from "shared/types/types.ts";
 import {SvgStar} from "shared/ui/SvgStar";
 
 interface RatingModalProps extends ModalProps {
@@ -27,7 +27,7 @@ const RatingModal: FC<RatingModalProps> = ({movie, ...restProps}) => {
                 <Title classNames={{root: classes.movieTitle}}> {movie.title} </Title>
                 <Rating
                     classNames={{root: classes.stars}}
-                    count={POSSIBLE_RATINGS.length}
+                    count={POSSIBLE_USER_RATINGS.length}
                     value={rating}
                     onChange={setRating}
                     emptySymbol={<SvgStar fill={['grey', 3]}/>}

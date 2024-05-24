@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useColor} from "shared/lib/hooks/useColor/useColor.tsx";
+import {useColor} from "shared/lib/hooks/useColor/useColor.ts";
 import {SvgComponentProps} from "shared/types/ui.ts";
 
 interface SvgChevronProps extends SvgComponentProps {
