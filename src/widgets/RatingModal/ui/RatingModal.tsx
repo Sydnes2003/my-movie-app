@@ -6,7 +6,7 @@ import {SvgStar} from "shared/ui/SvgStar";
 
 interface RatingModalProps extends ModalProps {
     movie: Movie,
-    onRatingSubmit: (movie: Movie, chosen: number) => void,
+    onRatingSubmit: (movie: Movie, submitted: Rating) => void,
 }
 
 const RatingModal: FC<RatingModalProps> = (
@@ -27,7 +27,7 @@ const RatingModal: FC<RatingModalProps> = (
         setChosenRating(0);
     };
     const handleSubmit = () => {
-        onRatingSubmit(movie as Movie, chosenRating);
+        onRatingSubmit(movie, chosenRating);
     };
 
     return (
@@ -41,7 +41,7 @@ const RatingModal: FC<RatingModalProps> = (
             {...restProps}
         >
             <Stack gap={16}>
-                <Title classNames={{root: classes.movieTitle}}> {movie.title} </Title>
+                <Title classNames={{root: classes.movieTitle}}> {movie.original_title} </Title>
                 <MantineRating
                     classNames={{root: classes.stars}}
                     count={POSSIBLE_USER_RATINGS.length - 1}

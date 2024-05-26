@@ -2,6 +2,7 @@ import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
+import {Params} from "../src/shared/types/types";
 
 dotenv.config();
 
@@ -14,26 +15,55 @@ app.use(cors());
 
 app.use(express.json());
 
+const isParams = (object: unknown): object is Params => {
+    if (typeof object !== 'object' || object === null) {
+        return false;
+    }
+
+    const params = object as Params;
+
+    if (params.with_genres !== undefined && typeof params.with_genres !== 'string') {
+        return false;
+    }
+    if (params.primary_release_year !== undefined && typeof params.primary_release_year !== 'string' && typeof params.primary_release_year !== 'number') {
+        return false;
+    }
+    if (params.vote_average_gte !== undefined && typeof params.vote_average_gte !== 'string' && typeof params.vote_average_gte !== 'number') {
+        return false;
+    }
+
+    return !(params.vote_average_lte !== undefined && typeof params.vote_average_lte !== 'string' && typeof params.vote_average_lte !== 'number');
+};
+
 app.get('/api/movies/search', async (req, res) => {
     try {
-        const { query, page, language, with_genres, primary_release_year, vote_average_lte, vote_average_gte, sort_by } = req.query;
+        console.log("Received Params: ", req.query.params);
+        if (!isParams(req.query.params)) {
+            return res.status(400).json({ error: "Invalid query parameters" });
+        }
+
+        const handleProperties = (object: Params, API_KEY: string | undefined) => {
+            const params = {
+                ['api_key']: API_KEY,
+                ['vote_average.gte']: object.vote_average_gte,
+                ['vote_average.lte']: object.vote_average_lte,
+                ...object,
+            };
+
+            delete params.vote_average_gte;
+            delete params.vote_average_lte;
+
+            return params;
+        };
+        const apiParams = handleProperties(req.query.params, API_KEY);
 
         const response = await axios.get(`${BASE_URL}/discover/movie`, {
-            params: {
-                api_key: API_KEY,
-                query,
-                page,
-                language,
-                with_genres,
-                primary_release_year,
-                'vote_average.lte': vote_average_lte,
-                'vote_average.gte': vote_average_gte,
-                sort_by,
-            },
+            params: apiParams,
         });
 
         res.json(response.data);
-    } catch (error) {
+    } catch (e) {
+        const error = e as Error;
         res.status(500).json({ error: error.message });
     }
 });
@@ -50,7 +80,8 @@ app.get('/api/movies/:id', async (req, res) => {
         });
 
         res.json(response.data);
-    } catch (error) {
+    } catch (e) {
+        const error = e as Error;
         res.status(500).json({ error: error.message });
     }
 });
@@ -64,7 +95,9 @@ app.get('/api/genres', async (req, res) => {
         });
 
         res.json(response.data);
-    } catch (error) {
+        console.log(response.data);
+    } catch (e) {
+        const error = e as Error;
         res.status(500).json({ error: error.message });
     }
 });

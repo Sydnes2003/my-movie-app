@@ -22,6 +22,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['warn'],
     'react/jsx-curly-brace-presence': ['warn'],
     'no-constant-condition': ['warn'],
+    '@typescript-eslint/no-explicit-any': ['warn'],
     // off
     'no-underscore-dangle': 'off',
   },

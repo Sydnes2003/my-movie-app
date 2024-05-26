@@ -37,6 +37,7 @@ const ComboRangeSelect: FC<ComboRangeSelectProps> = (
         <Group gap={8} {...groupProps}>
             {(Object.keys(values) as Key[]).map((key) =>
                 <ComboSingleSelect
+                    key={key}
                     label={labels[key]}
                     placeholder={placeholders[key]}
                     value={values[key]}

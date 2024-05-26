@@ -1,12 +1,15 @@
-import {useState} from "react";
+import {useCallback, useState} from "react";
 
-export const useFetching = (callback: () => Promise<void>) => {
+type UseFetchingReturnType = [() => Promise<void>, boolean, string | null];
+
+export const useFetching = (callback: () => Promise<void>): UseFetchingReturnType => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
-    const fetching = async () => {
+    const fetch = useCallback(async () => {
+        setIsLoading(true);
+        setError(null);
         try {
-            setIsLoading(true);
             await callback();
         } catch (e) {
             const error = e as Error;
@@ -14,7 +17,7 @@ export const useFetching = (callback: () => Promise<void>) => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [callback]);
 
-    return [fetching as () => Promise<void>, isLoading as boolean, error as string];
+    return [fetch, isLoading, error];
 };
